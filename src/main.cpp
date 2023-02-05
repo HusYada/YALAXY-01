@@ -1,6 +1,6 @@
-// ================== YALAXY-01 ==================  //
-//  ================== HusYada ===================  //
-
+// ================== YALAXY-01 ==================  // notez from me/ irl plan train journey, pack tv or laptop???? prob laptop alrady brought it :P
+//  ================== HusYada ===================  // sideways collision on borders, do that for all blocks, make level goddamn, make a beat?, github
+//225
 // Butano
 #include "bn_bg_palettes.h"
 #include "bn_bg_palette_color_hbe_ptr.h"
@@ -10,7 +10,11 @@
 #include "bn_display.h"
 #include "bn_fixed.h"
 #include "bn_keypad.h"
+#include "bn_log.h"
 #include "bn_math.h"
+#include "bn_regular_bg_actions.h"
+#include "bn_regular_bg_ptr.h"
+#include "bn_sound_items.h"
 #include "bn_sprite_ptr.h"
 #include "bn_sprite_tiles_ptr.h"
 #include "bn_sprite_palette_actions.h"
@@ -32,8 +36,11 @@
 #include "bn_sprite_items_title.h"
 #include "bn_sprite_items_congrats.h"
 #include "bn_sprite_items_notaball.h"
-
-#include "collision.h"
+// =======================================
+#include "bn_sprite_items_plyrsq.h"
+#include "bn_sprite_items_anothersq.h"
+#include "bn_sprite_items_dot.h"
+#include "bn_sprite_items_paa_title.h"
 
 // Palettes
 #include "bn_sprite_palette_items_gear_palm.h"
@@ -41,33 +48,82 @@
 #include "bn_sprite_palette_items_gear_pala.h"
 #include "bn_sprite_palette_items_gear_palp.h"
 
+// Backgrounds
+#include "bn_regular_bg_items_lovenue_1th.h"
+#include "bn_regular_bg_items_lovenue_1t1.h"
+#include "bn_regular_bg_items_lovenue_1t2.h"
+#include "bn_regular_bg_items_lovenue_1t3.h"
+#include "bn_regular_bg_items_lovenue_1t4.h"
+#include "bn_regular_bg_items_lvl1s0.h"
+#include "bn_regular_bg_items_lvl1s1.h"
+#include "bn_regular_bg_items_lvl1s2.h"
+#include "bn_regular_bg_items_lvl1s3.h"
+#include "bn_regular_bg_items_lvl1s4.h"
+
+#include "collision.h"
+
 // Player Variables
 int plyrx = -40;
-
 // Head Animation
 int headturn = 0; int headturntimer = 0; bool headturningl = false; bool headturningr = false;
 int headofset = 0; bool headreleft = false; bool headreright = false; int headofset2 = 0; int headofsety = 0;
-
 // Body Animation
 bool running = false; int runturn = 0; int runturntimer = 0;
-
 // Fire Animation
 bool flaming = false; int fireturn = 0; int fireturntimer = 0; int firey = 37;
-
 // Saber Animation
 bool slashing = false; int saberturn = 0; int saberturntimer = 0; int saberx = -11; int sabery = 30; int fcsbrx = 0;
-
 // Arm Stuff
 int armturn = 0; int armx = 20; int army = 24; bool facingleft = false;
-
 // P-Gon
 bool pgoning = false; int pgonx = 24; int pgonturn = 0; int pgontimer = 0;
-
 // M-Gon
 bool mgoning = false; int mgonx = 36; int mgony = -36; int mgonturn = 0; int mgontimer = 0; int mgonseedy = -36; //amazingvariavlenaebtw
-
 // Timers
 int timet = 120; int timeb = 120; int scene = 0; int ttimer = 0; int bossx = 120; bool bossmovingright = true;
+
+//================================================================================================================
+// Perfect Angles Advance
+
+// Player Transform
+int paplyrx = -60; float plyry = 0; float plyrw = 16; float plyrh = 16; float grv = 2; float fy = 2;
+int size = 0;    int colour = 0;  float hscm = 0;   float vscm = 0;
+
+// Player Middles (Left Middle + Top Middle = Top Left Corner)
+float lm; float rm; float tm; float bm;
+
+// Player Collision Offsets
+int lox = 0; int loy = 1; int loh = -2; int rox = 0; int roy = 1; int roh = -2; 
+int uox = 1; int uoy = 0; int uow = -2; int dux = 1; int doy = 0; int dow = -2;
+
+// Sizing
+bool flatten = false; bool spindly = false; bool jumping = false;
+int actiontimer = 0;
+int soundtimer = 0;
+
+// Gmae Variables
+int stage = 0; int lvl1s0x = 0; int lvl1s0y = -44;
+
+// Other Shape Co-Ordinates
+// LEVEL 1
+float gndx = -300; float gndy = 60; float gndw = 600;
+float rc1x =  8; float rc1y = 44; float rc1w = 64; float rc1h = 16;
+float rc2x = 16; float rc2y = 28; float rc2w = 16; float rc2h = 16;
+float rc3x = 64; float rc3y = 12; float rc3w = 32; float rc3h = 16;
+float rc4x = 96; float rc4y = -20; float rc4w = 32; float rc4h = 16;
+float rc5x = 56; float rc5y = -52; float rc5w = 16; float rc5h = 16;
+float rc6x = 16; float rc6y = -52; float rc6w = 16; float rc6h = 16;
+float rc7x = -88; float rc7y = -52; float rc7w = 48; float rc7h = 16;
+float rc8x = -100; float rc8y = -65; float rc8w = 8; float rc8h = 8;
+// LEVEL 3
+float mc1x = -16; float mc1y = 44; float mc1w = 16; float mc1h = 16;
+float mc2x = -16; float mc2y = 20; float mc2w = 16; float mc2h = 16;
+float mc3x = -16; float mc3y = -4; float mc3w = 16; float mc3h = 16;
+float mc4x = -24; float mc4y = -28; float mc4w = 32; float mc4h = 16;
+float mc5x = -32; float mc5y = 10; float mc5w = 16; float mc5h = 86;
+float mc6x = -92; float mc6y = 48; float mc6w = 8; float mc6h = 8;
+
+//================================================================================================================
 
 void the_big_show() {
 
@@ -103,7 +159,8 @@ void the_big_show() {
         // this is where the ifsanity begins, will clean later
     	while(!bn::keypad::start_pressed()) {
 
-            if(scene == 0) { title.set_position(0, 0); } else { title.set_position(-1000, -1000); }
+            // scene 0 = title, 1 = yearlysis, 2 = end, 3 = dream
+            if(scene == 0) { title.set_position(0, -40); } else { title.set_position(-1000, -1000); }
             if(scene == 2) { congrats.set_position(0, 0); } else { congrats.set_position(-1000, -1000); }
             if(bn::keypad::start_released() && scene == 0) { scene = 1; bossx = 100; bossmovingright = true;}
             if(scene == 1) { ttimer++; boss.set_position(bossx, 0);}
@@ -202,11 +259,11 @@ void the_big_show() {
 
             if(running){
                 runturntimer++;
-                if(runturn < 5 && runturntimer > 4) { 
+                if(runturn < 11 && runturntimer > 4) { 
                     runturn++;
                     runturntimer = 0;
                 }
-                if(runturn == 5 && runturntimer > 4) {
+                if(runturn == 11 && runturntimer > 4) {
                     runturn = 2;
                     runturntimer = 0;
                 }
@@ -350,11 +407,11 @@ void the_big_show() {
             
             gear_fire.set_position(plyrx+1,firey);
             gear_fire.set_tiles(bn::sprite_items::gear_fire.tiles_item().create_tiles(fireturn));
-            gear_body.set_position(plyrx+1,37);
+            //gear_body.set_position(plyrx+1,37); FINISH RUN CYCLE!
             gear_body.set_tiles(bn::sprite_items::gear_body.tiles_item().create_tiles(runturn));
             gear_saber.set_position(plyrx+saberx+fcsbrx,sabery);
             gear_saber.set_tiles(bn::sprite_items::gear_saber.tiles_item().create_tiles(saberturn));
-            gear_head.set_position(plyrx+headofset+headofset2,headofsety);
+            //gear_head.set_position(plyrx+headofset+headofset2,headofsety); READ ABOVE ^^
             gear_head.set_tiles(bn::sprite_items::gear_head.tiles_item().create_tiles(headturn));
             gear_arm.set_position(plyrx+armx, army);
             gear_arm.set_tiles(bn::sprite_items::gear_arm.tiles_item().create_tiles(armturn));
@@ -368,12 +425,397 @@ void the_big_show() {
      	}
     }
 
+void the_big_showtwo() {
+
+        // Player Sprite
+        bn::sprite_ptr plyrsq = bn::sprite_items::anothersq.create_sprite(paplyrx, plyry);
+        // Title Sprite
+        bn::sprite_ptr paa_title = bn::sprite_items::paa_title.create_sprite(0, -90);
+
+        bn::regular_bg_ptr lvl1s0 = bn::regular_bg_items::lvl1s0.create_bg(lvl1s0x,lvl1s0y);
+        bn::regular_bg_move_loop_action moveback(lvl1s0, 60, 4, 2);
+        // lvl1s0.set_priority(1);
+        bn::regular_bg_ptr lvl1s1 = bn::regular_bg_items::lvl1s1.create_bg(0,-44); 
+        //lvl1s1.set_priority(2);
+        //bn::regular_bg_ptr lvl1s2 = bn::regular_bg_items::lvl1s2.create_bg(0,-44);
+        //lvl1s2.set_priority(0);
+        bn::regular_bg_ptr lvl1s3 = bn::regular_bg_items::lvl1s3.create_bg(0,-44);
+        //lvl1s3.set_priority(0);
+        bn::regular_bg_ptr lvl1s4 = bn::regular_bg_items::lvl1s4.create_bg(0,-44);
+        //lvl1s4.set_priority(0);
+
+    // Overlap Function
+    colli::sion ocol;
+    
+    // Player Debug Dots (no for)
+    bn::sprite_ptr dot0 = bn::sprite_items::dot.create_sprite(paplyrx,plyry);
+    // Vertical Rect
+    bn::sprite_ptr dot1 = bn::sprite_items::dot.create_sprite(paplyrx-(plyrw/2), plyry-(plyrh/2));
+    bn::sprite_ptr dot2 = bn::sprite_items::dot.create_sprite(paplyrx+(plyrw/2), plyry-(plyrh/2));
+    bn::sprite_ptr dot3 = bn::sprite_items::dot.create_sprite(paplyrx-(plyrw/2), plyry+(plyrh/2));
+    bn::sprite_ptr dot4 = bn::sprite_items::dot.create_sprite(paplyrx+(plyrw/2), plyry+(plyrh/2));
+    // Horizontal Rect
+    bn::sprite_ptr dot5 = bn::sprite_items::dot.create_sprite(paplyrx-(plyrw/2), plyry-(plyrh/2));
+    bn::sprite_ptr dot6 = bn::sprite_items::dot.create_sprite(paplyrx+(plyrw/2), plyry-(plyrh/2));
+    bn::sprite_ptr dot7 = bn::sprite_items::dot.create_sprite(paplyrx-(plyrw/2), plyry+(plyrh/2));
+    bn::sprite_ptr dot8 = bn::sprite_items::dot.create_sprite(paplyrx+(plyrw/2), plyry+(plyrh/2)); 
+    // Level Debug Dots
+    // LEVEL 1 ==============================================================================
+    // bn::sprite_ptr dot11 = bn::sprite_items::dot.create_sprite(rc1x-(rc1w/2), rc1y-(rc1h/2));
+    // bn::sprite_ptr dot12 = bn::sprite_items::dot.create_sprite(rc1x+(rc1w/2), rc1y-(rc1h/2));
+    // bn::sprite_ptr dot13 = bn::sprite_items::dot.create_sprite(rc1x-(rc1w/2), rc1y+(rc1h/2));
+    // bn::sprite_ptr dot14 = bn::sprite_items::dot.create_sprite(rc1x+(rc1w/2), rc1y+(rc1h/2));
+    // bn::sprite_ptr dot21 = bn::sprite_items::dot.create_sprite(rc2x-(rc2w/2), rc2y-(rc2h/2));
+    // bn::sprite_ptr dot22 = bn::sprite_items::dot.create_sprite(rc2x+(rc2w/2), rc2y-(rc2h/2));
+    // bn::sprite_ptr dot23 = bn::sprite_items::dot.create_sprite(rc2x-(rc2w/2), rc2y+(rc2h/2));
+    // bn::sprite_ptr dot24 = bn::sprite_items::dot.create_sprite(rc2x+(rc2w/2), rc2y+(rc2h/2));
+    // bn::sprite_ptr dot31 = bn::sprite_items::dot.create_sprite(rc3x-(rc3w/2), rc3y-(rc3h/2));
+    // bn::sprite_ptr dot32 = bn::sprite_items::dot.create_sprite(rc3x+(rc3w/2), rc3y-(rc3h/2));
+    // bn::sprite_ptr dot33 = bn::sprite_items::dot.create_sprite(rc3x-(rc3w/2), rc3y+(rc3h/2));
+    // bn::sprite_ptr dot34 = bn::sprite_items::dot.create_sprite(rc3x+(rc3w/2), rc3y+(rc3h/2));
+    // bn::sprite_ptr dot41 = bn::sprite_items::dot.create_sprite(rc4x-(rc4w/2), rc4y-(rc4h/2));
+    // bn::sprite_ptr dot42 = bn::sprite_items::dot.create_sprite(rc4x+(rc4w/2), rc4y-(rc4h/2));
+    // bn::sprite_ptr dot43 = bn::sprite_items::dot.create_sprite(rc4x-(rc4w/2), rc4y+(rc4h/2));
+    // bn::sprite_ptr dot44 = bn::sprite_items::dot.create_sprite(rc4x+(rc4w/2), rc4y+(rc4h/2));
+    // bn::sprite_ptr dot51 = bn::sprite_items::dot.create_sprite(rc5x-(rc5w/2), rc5y-(rc5h/2));
+    // bn::sprite_ptr dot52 = bn::sprite_items::dot.create_sprite(rc5x+(rc5w/2), rc5y-(rc5h/2));
+    // bn::sprite_ptr dot53 = bn::sprite_items::dot.create_sprite(rc5x-(rc5w/2), rc5y+(rc5h/2));
+    // bn::sprite_ptr dot54 = bn::sprite_items::dot.create_sprite(rc5x+(rc5w/2), rc5y+(rc5h/2));
+    // bn::sprite_ptr dot61 = bn::sprite_items::dot.create_sprite(rc6x-(rc6w/2), rc6y-(rc6h/2));
+    // bn::sprite_ptr dot62 = bn::sprite_items::dot.create_sprite(rc6x+(rc6w/2), rc6y-(rc6h/2));
+    // bn::sprite_ptr dot63 = bn::sprite_items::dot.create_sprite(rc6x-(rc6w/2), rc6y+(rc6h/2));
+    // bn::sprite_ptr dot64 = bn::sprite_items::dot.create_sprite(rc6x+(rc6w/2), rc6y+(rc6h/2));
+    // bn::sprite_ptr dot71 = bn::sprite_items::dot.create_sprite(rc7x-(rc7w/2), rc7y-(rc7h/2));
+    // bn::sprite_ptr dot72 = bn::sprite_items::dot.create_sprite(rc7x+(rc7w/2), rc7y-(rc7h/2));
+    // bn::sprite_ptr dot73 = bn::sprite_items::dot.create_sprite(rc7x-(rc7w/2), rc7y+(rc7h/2));
+    // bn::sprite_ptr dot74 = bn::sprite_items::dot.create_sprite(rc7x+(rc7w/2), rc7y+(rc7h/2));
+    // bn::sprite_ptr dot81 = bn::sprite_items::dot.create_sprite(rc8x-(rc8w/2), rc8y-(rc8h/2));
+    // bn::sprite_ptr dot82 = bn::sprite_items::dot.create_sprite(rc8x+(rc8w/2), rc8y-(rc8h/2));
+    // bn::sprite_ptr dot83 = bn::sprite_items::dot.create_sprite(rc8x-(rc8w/2), rc8y+(rc8h/2));
+    // bn::sprite_ptr dot84 = bn::sprite_items::dot.create_sprite(rc8x+(rc8w/2), rc8y+(rc8h/2));
+    // LEVEL 3 ==============================================================================
+    // bn::sprite_ptr dot11 = bn::sprite_items::dot.create_sprite(mc1x-(mc1w/2), mc1y-(mc1h/2));
+    // bn::sprite_ptr dot12 = bn::sprite_items::dot.create_sprite(mc1x+(mc1w/2), mc1y-(mc1h/2));
+    // bn::sprite_ptr dot13 = bn::sprite_items::dot.create_sprite(mc1x-(mc1w/2), mc1y+(mc1h/2));
+    // bn::sprite_ptr dot14 = bn::sprite_items::dot.create_sprite(mc1x+(mc1w/2), mc1y+(mc1h/2));
+    // bn::sprite_ptr dot21 = bn::sprite_items::dot.create_sprite(mc2x-(mc2w/2), mc2y-(mc2h/2));
+    // bn::sprite_ptr dot22 = bn::sprite_items::dot.create_sprite(mc2x+(mc2w/2), mc2y-(mc2h/2));
+    // bn::sprite_ptr dot23 = bn::sprite_items::dot.create_sprite(mc2x-(mc2w/2), mc2y+(mc2h/2));
+    // bn::sprite_ptr dot24 = bn::sprite_items::dot.create_sprite(mc2x+(mc2w/2), mc2y+(mc2h/2));
+    // bn::sprite_ptr dot31 = bn::sprite_items::dot.create_sprite(mc3x-(mc3w/2), mc3y-(mc3h/2));
+    // bn::sprite_ptr dot32 = bn::sprite_items::dot.create_sprite(mc3x+(mc3w/2), mc3y-(mc3h/2));
+    // bn::sprite_ptr dot33 = bn::sprite_items::dot.create_sprite(mc3x-(mc3w/2), mc3y+(mc3h/2));
+    // bn::sprite_ptr dot34 = bn::sprite_items::dot.create_sprite(mc3x+(mc3w/2), mc3y+(mc3h/2));
+    // bn::sprite_ptr dot41 = bn::sprite_items::dot.create_sprite(mc4x-(mc4w/2), mc4y-(mc4h/2));
+    // bn::sprite_ptr dot42 = bn::sprite_items::dot.create_sprite(mc4x+(mc4w/2), mc4y-(mc4h/2));
+    // bn::sprite_ptr dot43 = bn::sprite_items::dot.create_sprite(mc4x-(mc4w/2), mc4y+(mc4h/2));
+    // bn::sprite_ptr dot44 = bn::sprite_items::dot.create_sprite(mc4x+(mc4w/2), mc4y+(mc4h/2));
+    // bn::sprite_ptr dot51 = bn::sprite_items::dot.create_sprite(mc5x-(mc5w/2), mc5y-(mc5h/2));
+    // bn::sprite_ptr dot52 = bn::sprite_items::dot.create_sprite(mc5x+(mc5w/2), mc5y-(mc5h/2));
+    // bn::sprite_ptr dot53 = bn::sprite_items::dot.create_sprite(mc5x-(mc5w/2), mc5y+(mc5h/2));
+    // bn::sprite_ptr dot54 = bn::sprite_items::dot.create_sprite(mc5x+(mc5w/2), mc5y+(mc5h/2));
+    // bn::sprite_ptr dot61 = bn::sprite_items::dot.create_sprite(mc6x-(mc6w/2), mc6y-(mc6h/2));
+    // bn::sprite_ptr dot62 = bn::sprite_items::dot.create_sprite(mc6x+(mc6w/2), mc6y-(mc6h/2));
+    // bn::sprite_ptr dot63 = bn::sprite_items::dot.create_sprite(mc6x-(mc6w/2), mc6y+(mc6h/2));
+    // bn::sprite_ptr dot64 = bn::sprite_items::dot.create_sprite(mc6x+(mc6w/2), mc6y+(mc6h/2));
+    // ============================================================================================
+        // dot11.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot12.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot13.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot14.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+        // dot21.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot22.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot23.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot24.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot31.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot32.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot33.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot34.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+        // dot41.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot42.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot43.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot44.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+        // dot51.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot52.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot53.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot54.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+        // dot61.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot62.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot63.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot64.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+        // dot71.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot72.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot73.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot74.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+        // dot81.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot82.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot83.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        // dot84.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+
+    //gndd.set_tiles(bn::sprite_items::plyrsq.tiles_item().create_tiles(5));
+    //gndd.set_scale(16,1);
+
+    while(!bn::keypad::start_pressed()) {
+
+        // Moving Back Title Screen
+        moveback.update();
+
+        // Corners (1 is top left, 2 is top right, 3 is bottom left, 4 is bottom right)
+        lm = paplyrx-(plyrw/2); rm = paplyrx+(plyrw/2); tm = plyry-(plyrh/2); bm = plyry+(plyrh/2);
+
+        // Move Debug Dots
+        dot0.set_position(paplyrx,plyry);
+        dot1.set_position(lm + 1, tm); dot2.set_position(rm - 0.1, tm); dot3.set_position(lm + 1, bm); dot4.set_position(rm - 0.1, bm);
+        dot5.set_position(lm, tm + 1); dot6.set_position(rm, tm + 1); dot7.set_position(lm, bm - 0.1); dot8.set_position(rm, bm - 0.1);
+
+        // Player Movement / Collision
+            if(bn::keypad::left_held() //&& ocol.overlap(lm+lox,tm+loy,0,plyrh+loh, gndx-(32/2)-1, gndy-(32/2)-1, 34, 34) == false 
+                                        ) { 
+                paplyrx -= 2;
+                //if(lvl1s1.x() > -16){ lvl1s1.set_x(60 + paplyrx - paplyrx % 2);} 
+            } else 
+            if(bn::keypad::right_held() //&& ocol.overlap(rm+rox,tm+roy,0,plyrh+roh, gndx-(32/2)-1, gndy-(32/2)-1, 34, 34) == false
+                                        ) { 
+                paplyrx += 2; 
+                //if(lvl1s1.x() < 16){ lvl1s1.set_x(60 + paplyrx - paplyrx % 2);}
+            }
+            if(bn::keypad::a_held() && (ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, gndx, gndy-(16/2)-1, gndw, 18) == true)) { jumping = true; }
+            if(stage == 1) {
+            if(bn::keypad::a_held() && (ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, gndx, gndy-(16/2)-1, gndw, 18) == true
+                                    || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc1x-32, rc1y-(16/2)-1, rc1w, rc1h+2) == true
+                                    || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc2x-(rc2w/2), rc2y-(rc2h/2)-1, rc2w, rc2h+2) == true
+                                    || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc3x-(rc3w/2), rc3y-(rc3h/2)-1, rc3w, rc3h+2) == true
+                                    || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc4x-(rc4w/2), rc4y-(rc4h/2)-1, rc4w, rc4h+2) == true
+                                    || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc5x-(rc5w/2), rc5y-(rc5h/2)-1, rc5w, rc5h+2) == true
+                                    || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc6x-(rc6w/2), rc6y-(rc6h/2)-1, rc6w, rc6h+2) == true
+                                    || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc7x-(rc7w/2), rc7y-(rc7h/2)-1, rc7w, rc7h+2) == true
+                                    )) { jumping = true; }
+            }
+            if(stage == 2) {
+            if(bn::keypad::a_held() && (ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, gndx, gndy-(16/2)-1, gndw, 18) == true
+                                    || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, mc2x-(mc2w/2), mc2y-(mc2h/2)-1, mc2w, mc2h+2) == true
+                                    || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, mc3x-(mc3w/2), mc3y-(mc3h/2)-1, mc3w, mc3h+2) == true
+                                    || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, mc4x-(mc4w/2), mc4y-(mc4h/2)-1, mc4w, mc4h+2) == true
+                                    || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, mc1x-(mc1w/2), mc1y-(mc1h/2)-1, mc1w, mc1h+2) == true
+                                    )) { jumping = true; }
+            }
+
+            if(stage == 1 && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc8x-(rc8w/2), rc8y-(rc8h/2)-1, rc8w, rc8h+2) == true) { stage = 2; paplyrx = 100; }
+            if(stage == 2 && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, mc6x-(mc6w/2), mc6y-(mc6h/2)-1, mc6w, mc6h+2) == true) { stage = 3; }
+
+        // Jumping
+        if(jumping) { 
+            plyry -= fy;
+            if(fy < 0.2) { fy -= 0.2; }
+            actiontimer++;
+            if(actiontimer > 12) { jumping = false; }
+            if(bn::keypad::a_released()) { jumping = false; }
+            //if(ocol.overlap(lm+uox,tm+uoy,plyrw+uow,0, gnd3x-(32/2)-1, gnd3y-(32/2)-1, 34, 34) == true) { plyry=plyry+4; jumping = false; }
+            //if(ocol.overlap(lm+uox,tm+uoy,plyrw+uow,0, gnd2x-(16/2)-1, gnd2y-(64/2)-1, 18, 66) == true) { plyry=plyry+2; jumping = false; }
+        }
+        if(!jumping){ actiontimer = 0; fy = 2; }
+ 
+        // Flatten
+        if(bn::keypad::l_held() && size < 8) { flatten = true; }
+        if(bn::keypad::l_released()) { flatten = false; soundtimer = 0; }
+        if(flatten) { 
+            if(size < 8) { flatten = false; }
+            size++;
+            // Rebound Flatten
+            soundtimer++;
+            if(soundtimer > 5) {
+                bn::sound_items::flatten.play(0.25);
+                soundtimer = 0;
+            }
+        }
+
+        // Spindy
+        if(bn::keypad::r_held() && size > -8) { spindly = true; }
+        if(bn::keypad::r_released()) { spindly = false; soundtimer = 0; grv = 2;}
+        if(spindly) { 
+            if(size > -8) { spindly = false; }
+            size--;
+            // Rebound Spindly goes here vv
+            if(ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, gndx, gndy-(16/2)-1, gndw, 18) == true
+            || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc1x-32, rc1y-(16/2)-1, rc1w, rc1h+2) == false
+            || ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc2x-(rc2w/2), rc2y-(rc2h/2)-1, rc2w, rc2h+2) == false
+            ) { plyry -= 2;}
+            //                           ^^
+            soundtimer++;
+            if(soundtimer > 5) {
+                bn::sound_items::spindly.play(0.25);
+                soundtimer = 0;
+            }
+        }
+
+        // Player Size... oh my go... letter 1=direction, o=offset, 3=x,y,w,h; left, right, up, down
+        if(size == 8)  { hscm = 1.6; vscm = -0.8; plyrw = 41.6; plyrh = 3.2;  
+            lox = 0; loy = 3; loh = -4; rox = 0; roy = 3; roh = -4; uox = 2; uoy = 1; uow = -4; dux = 2; doy = 0; dow = -4;}
+        if(size == 7)  { hscm = 1.4; vscm = -0.7; plyrw = 38.4; plyrh = 4.8;  
+            lox = 0; loy = 2; loh = -4; rox = 0; roy = 2; roh = -4; uox = 1; uoy = 0; uow = -2; dux = 1; doy = 0; dow = -2;}
+        if(size == 6)  { hscm = 1.2; vscm = -0.6; plyrw = 35.2; plyrh = 6.4;  
+            lox = 0; loy = 3; loh = -4; rox = 0; roy = 3; roh = -4; uox = 1; uoy = 1; uow = -2; dux = 1; doy = 0; dow = -2;}
+        if(size == 5)  { hscm = 1;   vscm = -0.5; plyrw = 32;   plyrh = 8;    
+            lox = 0; loy = 1; loh = -2; rox = 0; roy = 1; roh = -2; uox = 1; uoy = 0; uow = -2; dux = 1; doy = 0; dow = -2;}
+        if(size == 4)  { hscm = 0.8; vscm = -0.4; plyrw = 28.8; plyrh = 9.6;  
+            lox = 0; loy = 2; loh = -4; rox = 0; roy = 2; roh = -4; uox = 2; uoy = 0; uow = -4; dux = 2; doy = 0; dow = -4;}
+        if(size == 3)  { hscm = 0.6; vscm = -0.3; plyrw = 25.6; plyrh = 11.2; 
+            lox = 0; loy = 3; loh = -4; rox = 0; roy = 3; roh = -4; uox = 2; uoy = 1; uow = -4; dux = 2; doy = 0; dow = -4;}
+        if(size == 2)  { hscm = 0.4; vscm = -0.2; plyrw = 22.4; plyrh = 12.8; 
+            lox = 1; loy = 2; loh = -4; rox = 0; roy = 2; roh = -4; uox = 3; uoy = 0; uow = -4; dux = 3; doy = 0; dow = -4;}
+        if(size == 1)  { hscm = 0.2; vscm = -0.1; plyrw = 19.2; plyrh = 14.4; 
+            lox = 0; loy = 3; loh = -4; rox = 0; roy = 3; roh = -4; uox = 1; uoy = 1; uow = -2; dux = 1; doy = 0; dow = -2;}
+        if(size == 0)  { hscm = 0;   vscm =  0;   plyrw = 16;   plyrh = 16;   
+            lox = 0; loy = 1; loh = -2; rox = 0; roy = 1; roh = -2; uox = 1; uoy = 0; uow = -2; dux = 1; doy = 0; dow = -2;}
+        if(size == -1) { vscm = 0.2; hscm = -0.1; plyrw = 14.4; plyrh = 19.2; 
+            lox = 0; loy = 3; loh = -4; rox = 0; roy = 3; roh = -4; uox = 1; uoy = 1; uow = -2; dux = 1; doy = 0; dow = -2;}
+        if(size == -2) { vscm = 0.4; hscm = -0.2; plyrw = 12.8; plyrh = 22.4; 
+            lox = 1; loy = 3; loh = -4; rox = 0; roy = 3; roh = -4; uox = 3; uoy = 1; uow = -5; dux = 3; doy = 0; dow = -5;}
+        if(size == -3) { vscm = 0.6; hscm = -0.3; plyrw = 11.2; plyrh = 25.6; 
+            lox = 1; loy = 3; loh = -5; rox = 0; roy = 3; roh = -5; uox = 3; uoy = 1; uow = -5; dux = 3; doy = 0; dow = -5;}
+        if(size == -4) { vscm = 0.8; hscm = -0.4; plyrw = 9.6;  plyrh = 28.8; 
+            lox = 0; loy = 2; loh = -5; rox = 0; roy = 2; roh = -5; uox = 2; uoy = 0; uow = -5; dux = 2; doy = 0; dow = -5;}
+        if(size == -5) { vscm = 1;   hscm = -0.5; plyrw = 8;    plyrh = 32;   
+            lox = 0; loy = 1; loh = -2; rox = 0; roy = 1; roh = -2; uox = 1; uoy = 0; uow = -2; dux = 1; doy = 0; dow = -2;}
+        if(size == -6) { vscm = 1.2; hscm = -0.6; plyrw = 6.4;  plyrh = 35.2; 
+            lox = 1; loy = 3; loh = -4; rox = 0; roy = 3; roh = -4; uox = 3; uoy = 1; uow = -4; dux = 3; doy = 0; dow = -4;}
+        if(size == -7) { vscm = 1.4; hscm = -0.7; plyrw = 4.8;  plyrh = 38.4; 
+            lox = 0; loy = 3; loh = -4; rox = 0; roy = 3; roh = -4; uox = 2; uoy = 1; uow = -4; dux = 2; doy = 0; dow = -4;}
+        if(size == -8) { vscm = 1.6; hscm = -0.8; plyrw = 3.2;  plyrh = 41.6; 
+            lox = 1; loy = 3; loh = -5; rox = 0; roy = 3; roh = -5; uox = 3; uoy = 1; uow = -4; dux = 3; doy = 0; dow = -4;}
+
+        // Colour Change
+        if(plyrsq.horizontal_scale() > 0.8 && plyrsq.horizontal_scale() <= 1.4) { colour = 0; }
+        if(plyrsq.horizontal_scale() > 0.4 && plyrsq.horizontal_scale() <= 0.8) { colour = 1; }
+        if(plyrsq.horizontal_scale() > 0.1 && plyrsq.horizontal_scale() <= 0.4) { colour = 2; }
+        if(plyrsq.horizontal_scale() > 1.4 && plyrsq.horizontal_scale() <= 2.2) { colour = 3; }
+        if(plyrsq.horizontal_scale() > 2.2 && plyrsq.horizontal_scale() <= 2.7) { colour = 4; }
+
+        // Inital Position & Size
+        if(bn::keypad::b_pressed()) {
+            size = 0;
+            plyrsq.set_scale(1,1);
+            plyrsq.set_x(0);
+            plyrsq.set_y(0);
+            paplyrx = 0;
+            plyry = 0;
+            plyrw = 16;
+            plyrh = 16;
+            hscm = 0;
+            vscm = 0;
+            //hszm = 0;
+            //vszm = 0;
+        }
+
+        // Toggle Edge Points
+        if(bn::keypad::select_held()) { 
+            dot0.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+            dot1.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+            dot2.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+            dot3.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+            dot4.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+            dot5.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+            dot6.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+            dot7.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+            dot8.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1)); 
+        }
+
+        // Logging
+        if(bn::keypad::select_released()) { 
+            dot0.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(0)); 
+            dot1.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(0)); 
+            dot2.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(0)); 
+            dot3.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(0)); 
+            dot4.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(0));
+            dot5.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(0)); 
+            dot6.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(0)); 
+            dot7.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(0)); 
+            dot8.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(0)); 
+
+            BN_LOG("==================");
+            BN_LOG("Size: ", bn::fixed(size));
+            BN_LOG("Player X: ", bn::fixed(paplyrx)); BN_LOG("Player Y: ", bn::fixed(plyry));
+            BN_LOG("Player Width: ", bn::fixed(plyrw)); BN_LOG("Player Height: ", bn::fixed(plyrh));
+            // BN_LOG("Pos X: ", plyrsq.x()); BN_LOG("Pos Y: ", plyrsq.y());
+            BN_LOG("Width Scale: ", plyrsq.horizontal_scale()); BN_LOG("Height Scale: ", plyrsq.vertical_scale());
+            BN_LOG("Horizontal Scale Multiplier: ", bn::fixed(hscm)); BN_LOG("Vertical Scale Multiplier: ", bn::fixed(vscm));
+            BN_LOG("000000000000000000");
+            //BN_LOG("Back X: ", lvl1s1.x());
+            // BN_LOG("Left Middle: ", bn::fixed(lm));
+            // BN_LOG("Top Middle: ", bn::fixed(tm));
+            // BN_LOG("Up Col X: ", bn::fixed(lm+1));
+            // BN_LOG("Up Col Width: ", bn::fixed(plyrw-2));
+            // BN_LOG("OBJ2X1: ", bn::fixed(obj2x[0]));
+            // BN_LOG("OBJ2X2: ", bn::fixed(obj2x[1]));
+            // BN_LOG("OBJ2Y1: ", bn::fixed(obj2y[0]));
+            // BN_LOG("OBJ2Y2: ", bn::fixed(obj2y[1]));
+            //for (int i = 0; i < 2; i++) { BN_LOG("OBJ2XI: ", bn::fixed(obj2x[i])); }
+            //for (int i = 0; i < 2; i++) { BN_LOG("OBJ2YI: ", bn::fixed(obj2y[i])); }
+        }
+
+        if(stage == 0 && jumping == false && (ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, gndx, gndy-(16/2)-1, gndw, 18) == false)) { plyry += grv; }
+        if(stage == 3 && jumping == false && (ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, gndx, gndy-(16/2)-1, gndw, 18) == false)) { plyry += grv; }
+
+        if(stage == 1) {
+        if(jumping == false &&
+        (  ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, gndx, gndy-(16/2)-1, gndw, 18) == false
+        && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc1x-32, rc1y-(16/2)-1, rc1w, rc1h+2) == false
+        && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc2x-(rc2w/2), rc2y-(rc2h/2)-1, rc2w, rc2h+2) == false
+        && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc3x-(rc3w/2), rc3y-(rc3h/2)-1, rc3w, rc3h+2) == false
+        && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc4x-(rc4w/2), rc4y-(rc4h/2)-1, rc4w, rc4h+2) == false
+        && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc5x-(rc5w/2), rc5y-(rc5h/2)-1, rc5w, rc5h+2) == false
+        && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc6x-(rc6w/2), rc6y-(rc6h/2)-1, rc6w, rc6h+2) == false
+        && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, rc7x-(rc7w/2), rc7y-(rc7h/2)-1, rc7w, rc7h+2) == false
+        )) { plyry += grv; }
+    }
+
+        if(stage == 2) {
+        if(jumping == false &&
+        (  ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, gndx, gndy-(16/2)-1, gndw, 18) == false
+        && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, mc1x-(mc1w/2), mc1y-(mc1h/2)-1, mc1w, mc1h+2) == false
+        && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, mc2x-(mc2w/2), mc2y-(mc2h/2)-1, mc2w, mc2h+2) == false
+        && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, mc3x-(mc3w/2), mc3y-(mc3h/2)-1, mc3w, mc3h+2) == false
+        && ocol.overlap(lm+dux,bm+doy,plyrw+dow,0, mc4x-(mc4w/2), mc4y-(mc4h/2)-1, mc4w, mc4h+2) == false
+        )) { plyry += grv; }
+        }
+
+        plyrsq.set_z_order(3);
+        if(stage == 0) { lvl1s0.set_z_order(1); lvl1s1.set_z_order(2); //lvl1s2.set_z_order(2); 
+            lvl1s3.set_z_order(2); 
+            lvl1s4.set_z_order(2);paa_title.set_visible(true);}
+        if(stage == 1) { lvl1s0.set_z_order(2); lvl1s1.set_z_order(1); //lvl1s2.set_z_order(1); 
+            lvl1s3.set_z_order(2); 
+            lvl1s4.set_z_order(2);paa_title.set_visible(false);}
+        if(stage == 2) { lvl1s0.set_z_order(2); lvl1s1.set_z_order(2); //lvl1s2.set_z_order(2); 
+            lvl1s3.set_z_order(1); 
+            lvl1s4.set_z_order(2); paa_title.set_visible(false);}
+        if(stage == 3) { lvl1s0.set_z_order(2); lvl1s1.set_z_order(2); //lvl1s2.set_z_order(1); 
+            lvl1s3.set_z_order(2); 
+            lvl1s4.set_z_order(1);paa_title.set_visible(true); }
+        // if(stage == 4) { lvl1s0.set_z_order(0); lvl1s1.set_z_order(2); //lvl1s2.set_z_order(1); lvl1s3.set_z_order(0); 
+        //     lvl1s4.set_z_order(2); }
+
+        if(stage == 0 && bn::keypad::select_pressed()) { stage = 1; }
+        if(stage == 3 && bn::keypad::select_pressed()) { stage = 0; }
+
+        plyrsq.set_position(paplyrx - paplyrx % 2,plyry);
+        paa_title.set_position(0,-40);
+        //plyrsq.set_scale(plyrw,plyrh);
+        plyrsq.set_scale(1 + hscm, 1 + vscm);
+        plyrsq.set_tiles(bn::sprite_items::anothersq.tiles_item().create_tiles(colour));
+        //if(lvl1s1.x() < 16){ lvl1s1.set_position(60 + paplyrx - paplyrx % 2,-44 + plyry);}
+
+        bn::core::update();
+    }
+}
+
 int main() {
     bn::core::init();
-    bn::bg_palettes::set_transparent_color(bn::color(10, 10, 10));
+    bn::bg_palettes::set_transparent_color(bn::color(6, 10, 15));
+    //bn::bg_palettes::set_transparent_color(bn::color(6, 6, 9));
 
     while(true) {
-    	the_big_show();
+    	the_big_showtwo();
         bn::core::update();
     }
 };
