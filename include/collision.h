@@ -1,6 +1,8 @@
 #ifndef COLLISION_H
 #define COLLISION_H
 
+#include "bn_math.h"
+
 namespace colli
 {
 class sion
@@ -24,6 +26,21 @@ class sion
 				return true;
 			}
 			else { return false; }
+		}
+
+		int dist(int x1, int y1, int x2, int y2) {
+			// d=√((x2 – x1)² + (y2 – y1)²)
+			//int distance = bn::sqrt(bn::abs(((x2-x1)^2) + ((y2-y1)^2)));
+			int d = bn::abs(((x2-x1)^2) + ((y2-y1)^2));
+			int distance = bn::sqrt(d);
+			return distance;
+		}
+
+		int distcheck(int distfull, int distportion, bool firing) {
+			int spritetile;
+			if(distfull > distportion && firing) { spritetile = 1; }
+			else { spritetile = 0; }
+			return spritetile;
 		}
 	};
 };

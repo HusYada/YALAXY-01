@@ -1,5 +1,5 @@
-// ================== YALAXY-01 ==================  // notez from me/ irl plan train journey, pack tv or laptop???? prob laptop alrady brought it :P
-//  ================== HusYada ===================  // sideways collision on borders, do that for all blocks, make level goddamn, make a beat?, github
+// ================== YALAXY-01 ==================  // 
+//  ================== HusYada ===================  //
 //225
 // Butano
 #include "bn_bg_palettes.h"
@@ -17,6 +17,7 @@
 #include "bn_sound_items.h"
 #include "bn_sprite_ptr.h"
 #include "bn_sprite_tiles_ptr.h"
+#include "bn_sprite_actions.h"
 #include "bn_sprite_palette_actions.h"
 #include "bn_sprite_palettes_actions.h"
 #include "bn_sstream.h"
@@ -41,6 +42,12 @@
 #include "bn_sprite_items_anothersq.h"
 #include "bn_sprite_items_dot.h"
 #include "bn_sprite_items_paa_title.h"
+// =======================================
+#include "bn_sprite_items_f_cumba.h"
+#include "bn_sprite_items_f_dot.h"
+#include "bn_sprite_items_f_nana.h"
+#include "bn_sprite_items_f_poon.h"
+#include "bn_sprite_items_f_wire.h"
 
 // Palettes
 #include "bn_sprite_palette_items_gear_palm.h"
@@ -59,8 +66,11 @@
 #include "bn_regular_bg_items_lvl1s2.h"
 #include "bn_regular_bg_items_lvl1s3.h"
 #include "bn_regular_bg_items_lvl1s4.h"
+// =======================================
+#include "bn_regular_bg_items_flipoon_testlevel1.h"
 
 #include "collision.h"
+#include "flipoon.h"
 
 // Player Variables
 int plyrx = -40;
@@ -101,7 +111,7 @@ bool flatten = false; bool spindly = false; bool jumping = false;
 int actiontimer = 0;
 int soundtimer = 0;
 
-// Gmae Variables
+// Game Variables
 int stage = 0; int lvl1s0x = 0; int lvl1s0y = -44;
 
 // Other Shape Co-Ordinates
@@ -122,6 +132,13 @@ float mc3x = -16; float mc3y = -4; float mc3w = 16; float mc3h = 16;
 float mc4x = -24; float mc4y = -28; float mc4w = 32; float mc4h = 16;
 float mc5x = -32; float mc5y = 10; float mc5w = 16; float mc5h = 86;
 float mc6x = -92; float mc6y = 48; float mc6w = 8; float mc6h = 8;
+
+//================================================================================================================
+// Flipoon Advance
+
+int f_poonx = -70; int f_poony = -70; int f_startx = -70; int f_starty = -70;
+int f_firex = 1; int f_firey = -2; bool f_poonfiring = false;
+int f_dist; float f_planet = 23;
 
 //================================================================================================================
 
@@ -427,22 +444,22 @@ void the_big_show() {
 
 void the_big_showtwo() {
 
-        // Player Sprite
-        bn::sprite_ptr plyrsq = bn::sprite_items::anothersq.create_sprite(paplyrx, plyry);
-        // Title Sprite
-        bn::sprite_ptr paa_title = bn::sprite_items::paa_title.create_sprite(0, -90);
+    // Player Sprite
+    bn::sprite_ptr plyrsq = bn::sprite_items::anothersq.create_sprite(paplyrx, plyry);
+    // Title Sprite
+    bn::sprite_ptr paa_title = bn::sprite_items::paa_title.create_sprite(0, -90);
 
-        bn::regular_bg_ptr lvl1s0 = bn::regular_bg_items::lvl1s0.create_bg(lvl1s0x,lvl1s0y);
-        bn::regular_bg_move_loop_action moveback(lvl1s0, 60, 4, 2);
-        // lvl1s0.set_priority(1);
-        bn::regular_bg_ptr lvl1s1 = bn::regular_bg_items::lvl1s1.create_bg(0,-44); 
-        //lvl1s1.set_priority(2);
-        //bn::regular_bg_ptr lvl1s2 = bn::regular_bg_items::lvl1s2.create_bg(0,-44);
-        //lvl1s2.set_priority(0);
-        bn::regular_bg_ptr lvl1s3 = bn::regular_bg_items::lvl1s3.create_bg(0,-44);
-        //lvl1s3.set_priority(0);
-        bn::regular_bg_ptr lvl1s4 = bn::regular_bg_items::lvl1s4.create_bg(0,-44);
-        //lvl1s4.set_priority(0);
+    bn::regular_bg_ptr lvl1s0 = bn::regular_bg_items::lvl1s0.create_bg(lvl1s0x,lvl1s0y);
+    bn::regular_bg_move_loop_action moveback(lvl1s0, 60, 4, 2);
+    // lvl1s0.set_priority(1);
+    bn::regular_bg_ptr lvl1s1 = bn::regular_bg_items::lvl1s1.create_bg(0,-44); 
+    //lvl1s1.set_priority(2);
+    //bn::regular_bg_ptr lvl1s2 = bn::regular_bg_items::lvl1s2.create_bg(0,-44);
+    //lvl1s2.set_priority(0);
+    bn::regular_bg_ptr lvl1s3 = bn::regular_bg_items::lvl1s3.create_bg(0,-44);
+    //lvl1s3.set_priority(0);
+    bn::regular_bg_ptr lvl1s4 = bn::regular_bg_items::lvl1s4.create_bg(0,-44);
+    //lvl1s4.set_priority(0);
 
     // Overlap Function
     colli::sion ocol;
@@ -809,13 +826,176 @@ void the_big_showtwo() {
     }
 }
 
+void flipoon_advance(){
+	// Overlap Functionas
+    colli::sion ocol;
+    flip::poon fp;
+	// Player Sprites
+	bn::sprite_ptr f_cucumba = bn::sprite_items::f_cumba.create_sprite(fp.plyrx, fp.plyry); // f_cucumba.set_visible(!f_cucumba.visible());
+	bn::sprite_ptr f_poon = bn::sprite_items::f_poon.create_sprite(f_poonx, f_poony);	  	// f_poon.set_visible(!f_poon.visible());
+	bn::sprite_ptr f_banana = bn::sprite_items::f_nana.create_sprite(fp.plyrx, fp.plyry);	// f_banana.set_visible(!f_banana.visible());
+	// Poon Dots
+	bn::sprite_ptr f_dot1 = bn::sprite_items::f_dot.create_sprite(0, 90);
+	bn::sprite_ptr f_dot2 = bn::sprite_items::f_dot.create_sprite(0, 90);
+	bn::sprite_ptr f_dot3 = bn::sprite_items::f_dot.create_sprite(0, 90);
+	// Player Debug Dots
+	// Old Calculation
+	// bn::sprite_ptr f_dotbh1 = bn::sprite_items::dot.create_sprite(fp.plyrx-(fp.plyrw/2), fp.plyry-(fp.plyrh/2));
+	// bn::sprite_ptr f_dotbh2 = bn::sprite_items::dot.create_sprite(fp.plyrx+(fp.plyrw/2)+1, fp.plyry-(fp.plyrh/2));
+	// bn::sprite_ptr f_dotbh3 = bn::sprite_items::dot.create_sprite(fp.plyrx-(fp.plyrw/2), fp.plyry+(fp.plyrh/2));
+	// bn::sprite_ptr f_dotbh4 = bn::sprite_items::dot.create_sprite(fp.plyrx+(fp.plyrw/2)+1, fp.plyry+(fp.plyrh/2));
+	// Collision Calculation
+	// plyrx-plyrw,	plyry+1,1,plyrh-2
+	bn::sprite_ptr f_dotbh1 = bn::sprite_items::dot.create_sprite(fp.plyrx+fp.leftoffsetx - fp.plyrw+fp.leftoffsetw, fp.plyry - fp.plyrh);
+	bn::sprite_ptr f_dotbh2 = bn::sprite_items::dot.create_sprite(fp.plyrx + fp.plyrw+1, fp.plyry - fp.plyrh);
+	bn::sprite_ptr f_dotbh3 = bn::sprite_items::dot.create_sprite(fp.plyrx+fp.leftoffsetx - fp.plyrw+fp.leftoffsetw, fp.plyry + fp.plyrh);
+	bn::sprite_ptr f_dotbh4 = bn::sprite_items::dot.create_sprite(fp.plyrx + fp.plyrw+1, fp.plyry + fp.plyrh);
+	f_dotbh1.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_dotbh2.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_dotbh3.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_dotbh4.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	// Level Debug Dots
+	bn::sprite_ptr f_lvlt1o01a = bn::sprite_items::dot.create_sprite(fp.lvlt1x[0]			     ,fp.lvlt1y[0]);
+	bn::sprite_ptr f_lvlt1o01b = bn::sprite_items::dot.create_sprite(fp.lvlt1x[0] + fp.lvlt1w[0] ,fp.lvlt1y[0]);
+	bn::sprite_ptr f_lvlt1o01c = bn::sprite_items::dot.create_sprite(fp.lvlt1x[0]			     ,fp.lvlt1y[0] + fp.lvlt1h[0]);
+	bn::sprite_ptr f_lvlt1o01d = bn::sprite_items::dot.create_sprite(fp.lvlt1x[0] + fp.lvlt1w[0] ,fp.lvlt1y[0] + fp.lvlt1h[0]);
+	f_lvlt1o01a.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o01b.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o01c.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o01d.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	bn::sprite_ptr f_lvlt1o02a = bn::sprite_items::dot.create_sprite(fp.lvlt1x[1]			     ,fp.lvlt1y[1]);
+	bn::sprite_ptr f_lvlt1o02b = bn::sprite_items::dot.create_sprite(fp.lvlt1x[1] + fp.lvlt1w[1] ,fp.lvlt1y[1]);
+	bn::sprite_ptr f_lvlt1o02c = bn::sprite_items::dot.create_sprite(fp.lvlt1x[1]			     ,fp.lvlt1y[1] + fp.lvlt1h[1]);
+	bn::sprite_ptr f_lvlt1o02d = bn::sprite_items::dot.create_sprite(fp.lvlt1x[1] + fp.lvlt1w[1] ,fp.lvlt1y[1] + fp.lvlt1h[1]);
+	f_lvlt1o02a.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o02b.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o02c.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o02d.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));//
+
+	bn::regular_bg_ptr flipoon_testlevel1 = bn::regular_bg_items::flipoon_testlevel1.create_bg(fp.bgx,fp.bgy);
+
+	while(true){
+		for(int i = 0; i < 2; i++) {
+			if(bn::keypad::left_held() && fp.lvlt1col_left()) {
+				//Move Level
+			 	fp.lvlt1x[i]+=2;
+			 	fp.bgx++;
+			}
+			if(bn::keypad::right_held() && fp.lvlt1col_right()) {
+				//Move Level
+				fp.lvlt1x[i]-=2;
+				fp.bgx--;
+			}
+		}
+
+		flipoon_testlevel1.set_position(fp.bgx, fp.bgy);
+		// Debug Positionx Update
+		f_lvlt1o01a.set_position(fp.lvlt1x[0]			     ,fp.lvlt1y[0]);
+		f_lvlt1o01b.set_position(fp.lvlt1x[0] + fp.lvlt1w[0] ,fp.lvlt1y[0]);
+		f_lvlt1o01c.set_position(fp.lvlt1x[0]			     ,fp.lvlt1y[0] + fp.lvlt1h[0]);
+		f_lvlt1o01d.set_position(fp.lvlt1x[0] + fp.lvlt1w[0] ,fp.lvlt1y[0] + fp.lvlt1h[0]);
+		f_lvlt1o02a.set_position(fp.lvlt1x[1]			     ,fp.lvlt1y[1]);
+		f_lvlt1o02b.set_position(fp.lvlt1x[1] + fp.lvlt1w[1] ,fp.lvlt1y[1]);
+		f_lvlt1o02c.set_position(fp.lvlt1x[1]			     ,fp.lvlt1y[1] + fp.lvlt1h[1]);
+		f_lvlt1o02d.set_position(fp.lvlt1x[1] + fp.lvlt1w[1] ,fp.lvlt1y[1] + fp.lvlt1h[1]);
+
+		// Rotate Cumba (change this to L&R)
+		bn::fixed f_cumr = f_cucumba.rotation_angle();
+		if(bn::keypad::r_held()) {
+			f_cucumba.set_rotation_angle(bn::max(f_cumr - 5, bn::fixed(0))); 
+			if(f_cucumba.rotation_angle() == 0) { 
+				f_cucumba.set_rotation_angle(360);
+			}
+		} else if(bn::keypad::l_held()) { 
+        	f_cucumba.set_rotation_angle(bn::min(f_cumr + 5, bn::fixed(360))); 
+        	if(f_cucumba.rotation_angle() == 360) { 
+				f_cucumba.set_rotation_angle(0);
+			}
+        }
+        // if(bn::keypad::up_pressed()) { f_cucumba.set_rotation_angle(300); }
+        // if(bn::keypad::down_pressed()) { f_cucumba.set_rotation_angle(180); }
+        // if(bn::keypad::l_pressed()) { f_cucumba.set_rotation_angle(270); }
+        // if(bn::keypad::r_pressed()) { f_cucumba.set_rotation_angle(0);   }
+        if(bn::keypad::b_pressed()) { f_cucumba.set_rotation_angle(330); }
+
+        float f_anglex = bn::degrees_cos(f_cucumba.rotation_angle().to_float()).to_float();
+        float f_angley = bn::degrees_sin(f_cucumba.rotation_angle().to_float()).to_float();
+        //int f_angley = 0;//bn::abs(bn::sin(f_cucumba.rotation_angle().integer()).integer());
+        f_startx = f_planet * f_anglex;
+        f_starty = -f_planet * f_angley;
+
+        if(bn::keypad::a_pressed())  { f_poonfiring = false; }
+        if(bn::keypad::a_held())	 { 
+        	f_poonx = f_startx-3; // - is temp
+        	f_poony = f_starty-4; // - is temp
+        	f_firex = bn::degrees_cos(f_cucumba.rotation_angle().round_integer()).round_integer();
+        	f_firey = bn::degrees_sin(f_cucumba.rotation_angle().round_integer()).round_integer();
+        	f_poon.set_rotation_angle(f_cumr);
+        }
+        if(bn::keypad::a_released()) { f_poonfiring = true; }
+
+        // IT WORKS!! For Angle 330 it's good!! Now the attaching....
+        if(f_poonfiring) { f_poonx += f_firex*2; f_poony -= f_firey*2; }
+        //if(!f_poonfiring) {  }
+        f_poon.set_position(f_poonx,f_poony);
+
+        // Nana Flip
+        bn::fixed nanar = f_banana.rotation_angle();
+        if(bn::keypad::left_pressed())  { f_banana.set_horizontal_flip(true); }
+        if(bn::keypad::right_pressed()) { f_banana.set_horizontal_flip(false); }
+        if(bn::keypad::up_held()) {
+        	f_banana.set_rotation_angle(bn::max(nanar - 30, bn::fixed(0))); 
+			if(f_banana.rotation_angle() == 0) { 
+				f_banana.set_rotation_angle(360);
+			}
+        }
+        if(bn::keypad::up_released()) { f_banana.set_rotation_angle(0); }
+
+        // Poon Dots / Wire
+        f_dist = ocol.dist(fp.plyrx,fp.plyry,f_poonx,f_poony);
+        f_dot1.set_position(fp.plyrx+f_poonx/1.3,fp.plyry+f_poony/1.3);
+        f_dot2.set_position(fp.plyrx+f_poonx/2,fp.plyry+f_poony/2);
+        f_dot3.set_position(fp.plyrx+f_poonx/4,fp.plyry+f_poony/4);
+		f_dot1.set_tiles(bn::sprite_items::f_dot.tiles_item().create_tiles(ocol.distcheck(f_dist,2,f_poonfiring)));
+		f_dot2.set_tiles(bn::sprite_items::f_dot.tiles_item().create_tiles(ocol.distcheck(f_dist,3,f_poonfiring)));
+		f_dot3.set_tiles(bn::sprite_items::f_dot.tiles_item().create_tiles(ocol.distcheck(f_dist,4,f_poonfiring)));
+
+        // Logging
+        if(bn::keypad::select_pressed()) { 
+        	BN_LOG("===============");
+        	BN_LOG("Player Width: ",  fp.plyrw);
+        	BN_LOG("Player X - Width: ",  fp.plyrx+fp.leftoffsetx-fp.plyrw+fp.leftoffsetw);
+        	BN_LOG("Player X: ",  fp.plyrx);
+        	BN_LOG("Player X + Width: ",  fp.plyrx+fp.plyrw+1);
+        	BN_LOG("OBJ1 X: ",  fp.lvlt1x[0]);
+        	BN_LOG("OBJ1 X + W: ",  fp.lvlt1x[0]+fp.lvlt1w[0]);
+        	BN_LOG("OBJ2 X: ",  fp.lvlt1x[1]);
+        	BN_LOG("OBJ2 X + W: ",  fp.lvlt1x[1]+fp.lvlt1w[1]);
+        	// BN_LOG("Angle:    ",  f_cumr);
+        	// BN_LOG("Dist:     ",  f_dist);
+        	// BN_LOG("Aiming X: ",  f_startx);
+        	// BN_LOG("Aiming Y: ",  f_starty);
+        	/*
+        	|<- OBJ1 X+W 	|
+        	|		C 		|
+        	|	   -X+		|
+        	|	OBJ2 X ->	|left wall is adding by one on contact? hmmm
+        	*/
+    	}
+
+		bn::core::update();
+	}
+}
+
 int main() {
     bn::core::init();
-    bn::bg_palettes::set_transparent_color(bn::color(6, 10, 15));
-    //bn::bg_palettes::set_transparent_color(bn::color(6, 6, 9));
+    //bn::bg_palettes::set_transparent_color(bn::color(6, 10, 15));
+    bn::bg_palettes::set_transparent_color(bn::color(8, 8, 11));
+    // flip::poon fp;
+    // fp.lvlt1debug(1);
 
     while(true) {
-    	the_big_showtwo();
+    	flipoon_advance();
         bn::core::update();
     }
 };
