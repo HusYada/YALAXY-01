@@ -23,24 +23,47 @@ namespace flip {
 		int leftoffsetx = -1;
 		int leftoffsetw = -1;
 
-		// changing w1 makes no difference
-		int lvlt1x[4] = {-118,104,-119,  0};
-		//int lvlt1x[4] = {-49,49,-119,  0};
-		int lvlt1y[4] = { -79,-79,  68,-79};
-		int lvlt1w[4] = {  15, 15, 238, 33};
-		int lvlt1h[4] = { 158,158,  33, 11};
+						//0   1   2    3    4   5
+		int lvlt1x[6] = {-118, 80,-118,-118, -42, -42};
+		int lvlt1y[6] = { -71,-71, -71,  -9, -9 , 172};
+		int lvlt1w[6] = {  15, 15, 310,  88, 15 , 160};
+		int lvlt1h[6] = {  72,238,  15,  15, 240, 15};
+
+		int fruitx[5] = { -118, 80,-118,-118, -42 };
+		int fruity[5] = { -71,-71, -71,  -9, -9 };
+
+		/*
+		2->
+		0-------1
+		|		|
+		3---4 	|
+			|	|
+			|	|
+			|	|
+			5---o
+		*/
 
 		void lvlt1debug(int showtiles); // ignore this for now
 
 		bool lvlt1col_left() {
 			if(!ocol.overlap(plyrx-plyrw+leftoffsetx,	plyry+1,leftoffsetw,plyrh-2,lvlt1x[0],lvlt1y[0],lvlt1w[0],lvlt1h[0])
-			&& !ocol.overlap(plyrx-plyrw+leftoffsetx,	plyry+1,leftoffsetw,plyrh-2,lvlt1x[1],lvlt1y[1],lvlt1w[1],lvlt1h[1])) {
+			&& !ocol.overlap(plyrx-plyrw+leftoffsetx,	plyry+1,leftoffsetw,plyrh-2,lvlt1x[4],lvlt1y[4],lvlt1w[4],lvlt1h[4])) {
 				return true;
 			} else { return false; }
 		}
 		bool lvlt1col_right() {
-			if(!ocol.overlap(plyrx+plyrw,	plyry+1,1,plyrh-2,lvlt1x[0],lvlt1y[0],lvlt1w[0],lvlt1h[0])
-			&& !ocol.overlap(plyrx+plyrw,	plyry+1,1,plyrh-2,lvlt1x[1],lvlt1y[1],lvlt1w[1],lvlt1h[1])) {
+			if(!ocol.overlap(plyrx+plyrw,	plyry+1,1,plyrh-2,lvlt1x[1],lvlt1y[1],lvlt1w[1],lvlt1h[1])) {
+				return true;
+			} else { return false; }
+		}
+		bool lvlt1col_up() {
+			if(!ocol.overlap(plyrx+plyrw,	plyry+1,1,plyrh-2,lvlt1x[2],lvlt1y[2],lvlt1w[2],lvlt1h[2])) {
+				return true;
+			} else { return false; }
+		}
+		bool lvlt1col_down() {
+			if(!ocol.overlap(plyrx+plyrw,	plyry+1,1,plyrh-2,lvlt1x[3],lvlt1y[3],lvlt1w[3],lvlt1h[3])
+			&& !ocol.overlap(plyrx+plyrw,	plyry+1,1,plyrh-2,lvlt1x[5],lvlt1y[5],lvlt1w[5],lvlt1h[5])) {
 				return true;
 			} else { return false; }
 		}
