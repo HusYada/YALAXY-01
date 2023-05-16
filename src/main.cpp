@@ -1,6 +1,6 @@
 // ================== YALAXY-01 ==================  // 
 //  ================== HusYada ===================  //
-//225
+//225?? <-what is this i forgot lmao
 // Butano
 #include "bn_bg_palettes.h"
 #include "bn_bg_palette_color_hbe_ptr.h"
@@ -48,6 +48,7 @@
 #include "bn_sprite_items_f_nana.h"
 #include "bn_sprite_items_f_poon.h"
 #include "bn_sprite_items_f_wire.h"
+#include "bn_sprite_items_f_fruit.h"
 
 // Palettes
 #include "bn_sprite_palette_items_gear_palm.h"
@@ -68,6 +69,9 @@
 #include "bn_regular_bg_items_lvl1s4.h"
 // =======================================
 #include "bn_regular_bg_items_flipoon_testlevel1.h"
+#include "bn_regular_bg_items_flipoon_testlevel2.h"
+#include "bn_regular_bg_items_flipoon_testlevel3.h"
+#include "bn_regular_bg_items_flipoon_testlevel4.h"
 
 #include "collision.h"
 #include "flipoon.h"
@@ -871,24 +875,124 @@ void flipoon_advance(){
 	f_lvlt1o02b.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
 	f_lvlt1o02c.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
 	f_lvlt1o02d.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));//
+	bn::sprite_ptr f_lvlt1o03a = bn::sprite_items::dot.create_sprite(fp.lvlt1x[2]			     ,fp.lvlt1y[2]);
+	bn::sprite_ptr f_lvlt1o03b = bn::sprite_items::dot.create_sprite(fp.lvlt1x[2] + fp.lvlt1w[2] ,fp.lvlt1y[2]);
+	bn::sprite_ptr f_lvlt1o03c = bn::sprite_items::dot.create_sprite(fp.lvlt1x[2]			     ,fp.lvlt1y[2] + fp.lvlt1h[2]);
+	bn::sprite_ptr f_lvlt1o03d = bn::sprite_items::dot.create_sprite(fp.lvlt1x[2] + fp.lvlt1w[2] ,fp.lvlt1y[2] + fp.lvlt1h[2]);
+	f_lvlt1o03a.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o03b.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o03c.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o03d.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	bn::sprite_ptr f_lvlt1o04a = bn::sprite_items::dot.create_sprite(fp.lvlt1x[3]			     ,fp.lvlt1y[3]);
+	bn::sprite_ptr f_lvlt1o04b = bn::sprite_items::dot.create_sprite(fp.lvlt1x[3] + fp.lvlt1w[3] ,fp.lvlt1y[3]);
+	bn::sprite_ptr f_lvlt1o04c = bn::sprite_items::dot.create_sprite(fp.lvlt1x[3]			     ,fp.lvlt1y[3] + fp.lvlt1h[3]);
+	bn::sprite_ptr f_lvlt1o04d = bn::sprite_items::dot.create_sprite(fp.lvlt1x[3] + fp.lvlt1w[3] ,fp.lvlt1y[3] + fp.lvlt1h[3]);
+	f_lvlt1o04a.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o04b.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o04c.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o04d.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	bn::sprite_ptr f_lvlt1o05a = bn::sprite_items::dot.create_sprite(fp.lvlt1x[4]			     ,fp.lvlt1y[4]);
+	bn::sprite_ptr f_lvlt1o05b = bn::sprite_items::dot.create_sprite(fp.lvlt1x[4] + fp.lvlt1w[4] ,fp.lvlt1y[4]);
+	bn::sprite_ptr f_lvlt1o05c = bn::sprite_items::dot.create_sprite(fp.lvlt1x[4]			     ,fp.lvlt1y[4] + fp.lvlt1h[4]);
+	bn::sprite_ptr f_lvlt1o05d = bn::sprite_items::dot.create_sprite(fp.lvlt1x[4] + fp.lvlt1w[4] ,fp.lvlt1y[4] + fp.lvlt1h[4]);
+	f_lvlt1o05a.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o05b.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o05c.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o05d.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	bn::sprite_ptr f_lvlt1o06a = bn::sprite_items::dot.create_sprite(fp.lvlt1x[5]			     ,fp.lvlt1y[5]);
+	bn::sprite_ptr f_lvlt1o06b = bn::sprite_items::dot.create_sprite(fp.lvlt1x[5] + fp.lvlt1w[5] ,fp.lvlt1y[5]);
+	bn::sprite_ptr f_lvlt1o06c = bn::sprite_items::dot.create_sprite(fp.lvlt1x[5]			     ,fp.lvlt1y[5] + fp.lvlt1h[5]);
+	bn::sprite_ptr f_lvlt1o06d = bn::sprite_items::dot.create_sprite(fp.lvlt1x[5] + fp.lvlt1w[5] ,fp.lvlt1y[5] + fp.lvlt1h[5]);
+	f_lvlt1o06a.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o06b.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o06c.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	f_lvlt1o06d.set_tiles(bn::sprite_items::dot.tiles_item().create_tiles(1));
+	bn::sprite_ptr f_f1 = bn::sprite_items::f_fruit.create_sprite(fp.fruitx[0],fp.fruity[0]);
+	bn::sprite_ptr f_f2 = bn::sprite_items::f_fruit.create_sprite(fp.fruitx[1],fp.fruity[1]);
+	f_f2.set_tiles(bn::sprite_items::f_fruit.tiles_item().create_tiles(1));
+	bn::sprite_ptr f_f3 = bn::sprite_items::f_fruit.create_sprite(fp.fruitx[2],fp.fruity[2]);
+	f_f3.set_tiles(bn::sprite_items::f_fruit.tiles_item().create_tiles(2));
+	bn::sprite_ptr f_f4 = bn::sprite_items::f_fruit.create_sprite(fp.fruitx[3],fp.fruity[3]);
+	f_f4.set_tiles(bn::sprite_items::f_fruit.tiles_item().create_tiles(3));
+	bn::sprite_ptr f_f5 = bn::sprite_items::f_fruit.create_sprite(fp.fruitx[4],fp.fruity[4]);
+	f_f5.set_tiles(bn::sprite_items::f_fruit.tiles_item().create_tiles(4));
 
-	bn::regular_bg_ptr flipoon_testlevel1 = bn::regular_bg_items::flipoon_testlevel1.create_bg(fp.bgx,fp.bgy);
+	// For Loop Ver
+	// if(int i = 0; i > 6; i++) {sdsdsdsdsd
+
+	/// }
+	bn::regular_bg_ptr flipoon_testlevel3 = bn::regular_bg_items::flipoon_testlevel3.create_bg(0,0);
+	bn::regular_bg_ptr flipoon_testlevel4 = bn::regular_bg_items::flipoon_testlevel4.create_bg(fp.bgx,fp.bgy);
 
 	while(true){
-		for(int i = 0; i < 2; i++) {
+		//for(int i = 0; i < 6; i++) {sd
 			if(bn::keypad::left_held() && fp.lvlt1col_left()) {
 				//Move Level
-			 	fp.lvlt1x[i]+=2;
-			 	fp.bgx++;
+			 	//fp.lvlt1x[i]+=0.5;
+			 	fp.lvlt1x[0]+=2;
+			 	fp.lvlt1x[1]+=2;
+			 	fp.lvlt1x[2]+=2;
+			 	fp.lvlt1x[3]+=2;
+			 	fp.lvlt1x[4]+=2;
+			 	fp.lvlt1x[5]+=2;
+			 	fp.fruitx[0]+=2;
+			 	fp.fruitx[1]+=2;
+			 	fp.fruitx[2]+=2;
+			 	fp.fruitx[3]+=2;
+			 	fp.fruitx[4]+=2;
+			 	fp.bgx+=2;
 			}
 			if(bn::keypad::right_held() && fp.lvlt1col_right()) {
 				//Move Level
-				fp.lvlt1x[i]-=2;
-				fp.bgx--;
+				//fp.lvlt1x[i]-=0.5;
+				fp.lvlt1x[0]-=2;
+			 	fp.lvlt1x[1]-=2;
+			 	fp.lvlt1x[2]-=2;
+			 	fp.lvlt1x[3]-=2;
+			 	fp.lvlt1x[4]-=2;
+			 	fp.lvlt1x[5]-=2;
+			 	fp.fruitx[0]-=2;
+			 	fp.fruitx[1]-=2;
+			 	fp.fruitx[2]-=2;
+			 	fp.fruitx[3]-=2;
+			 	fp.fruitx[4]-=2;
+				fp.bgx-=2;
 			}
-		}
+			if(bn::keypad::up_held() && fp.lvlt1col_up()) {
+				//Move Level
+			 	//fp.lvlt1y[i]+=0.5;
+			 	fp.lvlt1y[0]+=2;
+			 	fp.lvlt1y[1]+=2;
+			 	fp.lvlt1y[2]+=2;
+			 	fp.lvlt1y[3]+=2;
+			 	fp.lvlt1y[4]+=2;
+			 	fp.lvlt1y[5]+=2;
+			 	fp.fruity[0]+=2;
+			 	fp.fruity[1]+=2;
+			 	fp.fruity[2]+=2;
+			 	fp.fruity[3]+=2;
+			 	fp.fruity[4]+=2;
+			 	fp.bgy+=2;
+			}
+			if(bn::keypad::down_held() && fp.lvlt1col_down()) {
+				//Move Level
+			 	//fp.lvlt1y[i]-=0.5;
+			 	fp.lvlt1y[0]-=2;
+			 	fp.lvlt1y[1]-=2;
+			 	fp.lvlt1y[2]-=2;
+			 	fp.lvlt1y[3]-=2;
+			 	fp.lvlt1y[4]-=2;
+			 	fp.lvlt1y[5]-=2;
+			 	fp.fruity[0]-=2;
+			 	fp.fruity[1]-=2;
+			 	fp.fruity[2]-=2;
+			 	fp.fruity[3]-=2;
+			 	fp.fruity[4]-=2;
+			 	fp.bgy-=2;
+			}
+		//}work
 
-		flipoon_testlevel1.set_position(fp.bgx, fp.bgy);
+		flipoon_testlevel4.set_position(fp.bgx, fp.bgy);
 		// Debug Positionx Update
 		f_lvlt1o01a.set_position(fp.lvlt1x[0]			     ,fp.lvlt1y[0]);
 		f_lvlt1o01b.set_position(fp.lvlt1x[0] + fp.lvlt1w[0] ,fp.lvlt1y[0]);
@@ -898,6 +1002,29 @@ void flipoon_advance(){
 		f_lvlt1o02b.set_position(fp.lvlt1x[1] + fp.lvlt1w[1] ,fp.lvlt1y[1]);
 		f_lvlt1o02c.set_position(fp.lvlt1x[1]			     ,fp.lvlt1y[1] + fp.lvlt1h[1]);
 		f_lvlt1o02d.set_position(fp.lvlt1x[1] + fp.lvlt1w[1] ,fp.lvlt1y[1] + fp.lvlt1h[1]);
+		f_lvlt1o03a.set_position(fp.lvlt1x[2]			     ,fp.lvlt1y[2]);
+		f_lvlt1o03b.set_position(fp.lvlt1x[2] + fp.lvlt1w[2] ,fp.lvlt1y[2]);
+		f_lvlt1o03c.set_position(fp.lvlt1x[2]			     ,fp.lvlt1y[2] + fp.lvlt1h[2]);
+		f_lvlt1o03d.set_position(fp.lvlt1x[2] + fp.lvlt1w[2] ,fp.lvlt1y[2] + fp.lvlt1h[2]);
+		f_lvlt1o04a.set_position(fp.lvlt1x[3]			     ,fp.lvlt1y[3]);
+		f_lvlt1o04b.set_position(fp.lvlt1x[3] + fp.lvlt1w[3] ,fp.lvlt1y[3]);
+		f_lvlt1o04c.set_position(fp.lvlt1x[3]			     ,fp.lvlt1y[3] + fp.lvlt1h[3]);
+		f_lvlt1o04d.set_position(fp.lvlt1x[3] + fp.lvlt1w[3] ,fp.lvlt1y[3] + fp.lvlt1h[3]);
+		f_lvlt1o05a.set_position(fp.lvlt1x[4]			     ,fp.lvlt1y[4]);
+		f_lvlt1o05b.set_position(fp.lvlt1x[4] + fp.lvlt1w[4] ,fp.lvlt1y[4]);
+		f_lvlt1o05c.set_position(fp.lvlt1x[4]			     ,fp.lvlt1y[4] + fp.lvlt1h[4]);
+		f_lvlt1o05d.set_position(fp.lvlt1x[4] + fp.lvlt1w[4] ,fp.lvlt1y[4] + fp.lvlt1h[4]);
+		f_lvlt1o06a.set_position(fp.lvlt1x[5]			     ,fp.lvlt1y[5]);
+		f_lvlt1o06b.set_position(fp.lvlt1x[5] + fp.lvlt1w[5] ,fp.lvlt1y[5]);
+		f_lvlt1o06c.set_position(fp.lvlt1x[5]			     ,fp.lvlt1y[5] + fp.lvlt1h[5]);
+		f_lvlt1o06d.set_position(fp.lvlt1x[5] + fp.lvlt1w[5] ,fp.lvlt1y[5] + fp.lvlt1h[5]);
+
+		f_f1.set_position(fp.fruitx[0],fp.fruity[0]);
+		f_f2.set_position(fp.fruitx[1],fp.fruity[1]);
+		f_f3.set_position(fp.fruitx[2],fp.fruity[2]);
+		f_f4.set_position(fp.fruitx[3],fp.fruity[3]);
+		f_f5.set_position(fp.fruitx[4],fp.fruity[4]);
+
 
 		// Rotate Cumba (change this to L&R)
 		bn::fixed f_cumr = f_cucumba.rotation_angle();
@@ -979,7 +1106,7 @@ void flipoon_advance(){
         	|<- OBJ1 X+W 	|
         	|		C 		|
         	|	   -X+		|
-        	|	OBJ2 X ->	|left wall is adding by one on contact? hmmm
+        	|	OBJ2 X ->	|left wall is adding by one on contact? hmmmmmm
         	*/
     	}
 
@@ -991,6 +1118,7 @@ int main() {
     bn::core::init();
     //bn::bg_palettes::set_transparent_color(bn::color(6, 10, 15));
     bn::bg_palettes::set_transparent_color(bn::color(8, 8, 11));
+    bn::bg_palettes::set_transparent_color(bn::color(5, 25, 25));
     // flip::poon fp;
     // fp.lvlt1debug(1);
 
